@@ -72,39 +72,27 @@ main {
   border-top: var(--color-secondary-bg);
 }
 
-input {
-  background: 1px solid var(--color-bg);
-  border: 1px solid var(--color-border);
-  color: 1px solid var(--color-primary-text);
-  padding: 0.5rem;
-}
-
-input:focus-visible {
-  border-color: var(--color-border-focus);
-  outline-color: var(--color-border-focus);
-}
-
 svg {
   stroke: var(--color-icon, rgba(0, 0, 0, 0.9));
 }
 
-/* main {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-} */
+input {
+  background-color: var(--color-bg);
+  padding: 4px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--color-secondary-bg);
+  width: 80px;
+  font-size: 10px;
+  color: var(--color-white);
+}
 
-/* section {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 1rem;
-} */
-/* section > * + * {
-  margin-top: 0.5rem;
-} */
+input:focus-visible {
+  border-color: var(--color-white);
+}
+
+input:active {
+  border-color: var(--color-white);
+}
 
 main {
   overflow-x: hidden;
@@ -164,4 +152,18 @@ img {
   color: rgba(0, 0, 0, 0.8);
   border-radius: 4px;
   cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 1px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-color: var(--color-secondary-bg);
+  border: 2px solid var(--color-secondary-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-secondary-bg);
 }

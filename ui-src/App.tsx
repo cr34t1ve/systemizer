@@ -58,6 +58,11 @@ function App() {
             {textList.map((text: TextNodeI) => (
               <div className="text-group-wrapper">
                 <div className="font-size-wrapper">
+                  <input
+                    type="text"
+                    name="variationName"
+                    placeholder="Heading 1"
+                  />
                   <p
                     style={{
                       color: "var(--color-secondary-text)",
