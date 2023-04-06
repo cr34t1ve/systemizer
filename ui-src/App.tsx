@@ -56,9 +56,39 @@ function App() {
         <>
           <section>
             {textList.map((text: TextNodeI) => (
-              <h3 style={{ fontSize: text.fontSize, color: "white" }}>
-                Text From Page Somewhere
-              </h3>
+              <div className="text-group-wrapper">
+                <div className="font-size-wrapper">
+                  <p
+                    style={{
+                      color: "var(--color-secondary-text)",
+                      fontSize: 12,
+                    }}
+                  >
+                    {text.fontSize} px
+                  </p>
+                </div>
+                <div className="text-preview-wrapper">
+                  <p
+                    style={{
+                      fontSize: 10,
+                      color: "var(--color-secondary-text)",
+                    }}
+                  >
+                    {text.fontName.style}
+                  </p>
+                  <h3
+                    style={{
+                      fontSize: text.fontSize,
+                      color: "var(--color-primary-text)",
+                      whiteSpace: "nowrap",
+                      paddingLeft: 0,
+                      margin: 0,
+                    }}
+                  >
+                    Text From Page Somewhere
+                  </h3>
+                </div>
+              </div>
             ))}
           </section>
         </>
