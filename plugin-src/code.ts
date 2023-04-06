@@ -1,25 +1,74 @@
 /** @format */
 
-figma.showUI(__html__, { themeColors: true, height: 300, width: 1000 });
+function sortByFontSizeDesc(textNodes: TextNode[]): TextNode[] {
+  const mixedNodes: TextNode[] = [];
+  const filteredNodes: TextNode[] = textNodes.filter((node) => {
+    if (typeof node.fontSize === "number") {
+      return true;
+    } else {
+      mixedNodes.push(node);
+      return false;
+    }
+  });
+  const sortedNodes: TextNode[] = filteredNodes.sort((a, b) => {
+    if (typeof a.fontSize === "number" && typeof b.fontSize === "number") {
+      return b.fontSize - a.fontSize;
+    } else {
+      // Return a default value or skip the comparison for mixed values
+      return 0;
+    }
+  });
+  return sortedNodes.concat(mixedNodes);
+}
+
+figma.showUI(__html__, { themeColors: true, height: 300, width: 420 });
 
 figma.ui.onmessage = (msg) => {
-  if (msg.type === "create-rectangles") {
-    const nodes = [];
+  if (msg.prompt === "get-text") {
+    figma.ui.resize(1200, 1000);
+    // Array to store OG text list
+    // TODO: Change to `new Set()` for persormance
+    // let ogTextList: Set<TextNode> = new Set();
+    let ogTextList: Array<TextNode> = [];
+    let sortedTextList: Array<TextNode> = [];
 
-    for (let i = 0; i < msg.count; i++) {
-      const rect = figma.createEllipse();
-      rect.x = i * 150;
-      rect.fills = [{ type: "SOLID", color: { r: 1, g: 0.5, b: 0 } }];
-      figma.currentPage.appendChild(rect);
-      nodes.push(rect);
-    }
+    // Get all text nodes in figma page
+    const specificText = figma.currentPage.findAllWithCriteria({
+      types: ["TEXT"],
+    });
+    // const textStyles: { [key: string]: TextStyle } = {};
 
-    figma.currentPage.selection = nodes;
-    figma.viewport.scrollAndZoomIntoView(nodes);
+    // Filter for recurring styles
+    specificText.map((node: TextNode, index: number) => {
+      if (
+        ogTextList.findIndex(
+          (text: TextNode) => text.fontSize === node.fontSize
+        ) === -1
+      ) {
+        ogTextList.push(node);
+      }
+    });
+
+    // Sort array by Font Size in Descending Order
+    const anotherList = sortByFontSizeDesc(ogTextList) as TextNode[];
+
+    // Empty array to hold transformed values
+    let listWithValues: Array<any> = [];
+
+    // Manually structure object
+    anotherList.map((node) => {
+      listWithValues.push({
+        fontName: node.fontName,
+        fontSize: node.fontSize,
+      });
+    });
+
+    // figma.currentPage.selection = nodes;
+    // figma.viewport.scrollAndZoomIntoView(nodes);
 
     figma.ui.postMessage({
-      type: "create-rectangles",
-      message: `Created ${msg.count} Rectangles`,
+      type: "get-text",
+      prompt: listWithValues,
     });
   }
 

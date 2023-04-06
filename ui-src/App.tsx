@@ -4,11 +4,18 @@ import React, { useRef, useState } from "react";
 import logoPng from "./logo.png";
 import logoSvg from "./logo.svg?raw";
 import Logo from "./Logo";
+import Text from "@figma/plugin-typings";
 import "./App.css";
 
+interface TextNodeI {
+  fontSize: any;
+  fontName: FontName;
+}
+
 function App() {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textListRef = useRef<any>(null);
   const [appState, setAppState] = useState<"home" | "textStyles">("home");
+  const [textList, setTextList] = useState<any>([]);
 
   const onGetText = () => {
     // const count = Number(inputRef.current?.value || 0);
@@ -23,9 +30,12 @@ function App() {
     console.log("here");
     // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
-      const { type, message } = event.data.pluginMessage;
-      if (type === "create-rectangles") {
-        console.log(`Figma Says: ${message}`);
+      const { type, prompt }: { type: string; prompt: TextNodeI[] } =
+        event.data.pluginMessage;
+      if (type === "get-text") {
+        setAppState("textStyles");
+        textListRef.current = prompt;
+        setTextList(prompt);
       }
     };
   }, [window]);
@@ -43,7 +53,15 @@ function App() {
           </section>
         </>
       ) : (
-        <></>
+        <>
+          <section>
+            {textList.map((text: TextNodeI) => (
+              <h3 style={{ fontSize: text.fontSize, color: "white" }}>
+                Text From Page Somewhere
+              </h3>
+            ))}
+          </section>
+        </>
       )}
     </main>
   );
