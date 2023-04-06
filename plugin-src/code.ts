@@ -25,7 +25,7 @@ figma.showUI(__html__, { themeColors: true, height: 300, width: 420 });
 
 figma.ui.onmessage = (msg) => {
   if (msg.prompt === "get-text") {
-    figma.ui.resize(1200, 1000);
+    figma.ui.resize(970, 690);
     // Array to store OG text list
     // TODO: Change to `new Set()` for persormance
     // let ogTextList: Set<TextNode> = new Set();
