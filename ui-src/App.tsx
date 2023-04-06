@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import logoPng from "./logo.png";
 import logoSvg from "./logo.svg?raw";
 import Logo from "./Logo";
@@ -8,13 +8,11 @@ import "./App.css";
 
 function App() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [appState, setAppState] = useState<"home" | "textStyles">("home");
 
-  const onCreate = () => {
-    const count = Number(inputRef.current?.value || 0);
-    parent.postMessage(
-      { pluginMessage: { type: "create-rectangles", count } },
-      "*"
-    );
+  const onGetText = () => {
+    // const count = Number(inputRef.current?.value || 0);
+    parent.postMessage({ pluginMessage: { prompt: "get-text" } }, "*");
   };
 
   const onCancel = () => {
@@ -33,25 +31,20 @@ function App() {
   }, [window]);
 
   return (
+    // if prompt to get text styles is clicked,
+    // show gotten text style else whow button
     <main>
-      <header>
-        <img src={logoPng} />
-        &nbsp;
-        <img src={`data:image/svg+xml;utf8,${logoSvg}`} />
-        &nbsp;
-        <Logo />
-        <h2>Circle Creator</h2>
-      </header>
-      <section>
-        <input id="input" type="number" min="0" ref={inputRef} />
-        <label htmlFor="input">Rectangle Count</label>
-      </section>
-      <footer>
-        <button className="brand" onClick={onCreate}>
-          Create
-        </button>
-        <button onClick={onCancel}>Cancel</button>
-      </footer>
+      {appState === "home" ? (
+        <>
+          <section className="home-section">
+            <button className="home-style-button" onClick={onGetText}>
+              Generate Text Library
+            </button>
+          </section>
+        </>
+      ) : (
+        <></>
+      )}
     </main>
   );
 }
