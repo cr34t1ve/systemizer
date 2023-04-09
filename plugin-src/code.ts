@@ -57,11 +57,15 @@ figma.ui.onmessage = (msg) => {
 
     // Manually structure object
     anotherList.map((node) => {
-      listWithValues.push({
-        fontName: node.fontName,
-        fontSize: node.fontSize,
-      });
+      if (typeof node.fontName !== typeof figma.mixed) {
+        listWithValues.push({
+          fontName: node.fontName,
+          fontSize: node.fontSize,
+        });
+      }
     });
+
+    console.log(listWithValues);
 
     // figma.currentPage.selection = nodes;
     // figma.viewport.scrollAndZoomIntoView(nodes);
