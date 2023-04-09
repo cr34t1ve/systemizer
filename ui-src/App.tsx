@@ -1,13 +1,12 @@
 /** @format */
 
 import React, { useRef, useState } from "react";
-import logoPng from "./logo.png";
-import logoSvg from "./logo.svg?raw";
-import Logo from "./Logo";
-import Text from "@figma/plugin-typings";
+import {} from "@figma/plugin-typings";
 import "./App.css";
 
 interface TextNodeI {
+  id: string;
+  variationName: string;
   fontSize: any;
   fontName: FontName;
 }
@@ -24,6 +23,20 @@ function App() {
 
   const onCancel = () => {
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+  };
+
+  const onEdit = (id: string, varName: string) => {
+    setTextList(
+      textList.map((node: TextNodeI) => {
+        if (node.id === id) {
+          // Create a *new* object with changes
+          return { ...node, variationName: varName };
+        } else {
+          // No changes
+          return node;
+        }
+      })
+    );
   };
 
   React.useEffect(() => {
@@ -55,13 +68,15 @@ function App() {
       ) : (
         <>
           <section>
-            {textList.map((text: TextNodeI) => (
+            {textList.map((text: TextNodeI, index: Number) => (
               <div className="text-group-wrapper">
                 <div className="font-size-wrapper">
                   <input
                     type="text"
                     name="variationName"
                     placeholder="Heading 1"
+                    value={text.variationName.toString()}
+                    onChange={(e) => onEdit(text.id, e.target.value)}
                   />
                   <p
                     style={{

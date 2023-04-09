@@ -57,8 +57,11 @@ figma.ui.onmessage = (msg) => {
 
     // Manually structure object
     anotherList.map((node) => {
+      // Do not include text nodes with mixed font styles
       if (typeof node.fontName !== typeof figma.mixed) {
         listWithValues.push({
+          id: node.id,
+          variationName: node.name,
           fontName: node.fontName,
           fontSize: node.fontSize,
         });
