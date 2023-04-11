@@ -73,7 +73,7 @@ figma.ui.onmessage = async (msg) => {
       }
     });
 
-    console.log(listWithValues);
+    // console.log(listWithValues);
 
     // figma.currentPage.selection = nodes;
     // figma.viewport.scrollAndZoomIntoView(nodes);
