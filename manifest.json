@@ -1,7 +1,7 @@
 {
   "name": "Systemizer",
-  "id": "",
-  "api": "1.0.0",
+  "id": "1227072991823029464",
+  "api": "1.0.1",
   "editorType": ["figma", "figjam"],
   "permissions": [],
   "main": "dist/code.js",

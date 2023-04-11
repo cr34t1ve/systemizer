@@ -22,7 +22,14 @@ function App() {
   };
 
   const onCancel = () => {
-    parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+    parent.postMessage({ pluginMessage: { prompt: "cancel" } }, "*");
+  };
+
+  const onCreate = () => {
+    parent.postMessage(
+      { pluginMessage: { prompt: "create-frames", data: textList } },
+      "*"
+    );
   };
 
   const onEdit = (id: string, varName: string) => {
@@ -43,12 +50,12 @@ function App() {
     console.log("here");
     // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
-      const { type, prompt }: { type: string; prompt: TextNodeI[] } =
+      const { type, data }: { type: string; data: TextNodeI[] } =
         event.data.pluginMessage;
       if (type === "get-text") {
         setAppState("textStyles");
-        textListRef.current = prompt;
-        setTextList(prompt);
+        textListRef.current = data;
+        setTextList(data);
       }
     };
   }, [window]);
@@ -99,6 +106,7 @@ function App() {
                   <h3
                     style={{
                       fontSize: text.fontSize,
+                      fontFamily: `'${text.fontName.family}'` || "Inter",
                       color: "var(--color-primary-text)",
                       whiteSpace: "nowrap",
                       paddingLeft: 0,
@@ -110,6 +118,9 @@ function App() {
                 </div>
               </div>
             ))}
+            <button className="generate-button" onClick={onCreate}>
+              Generate
+            </button>
           </section>
         </>
       )}

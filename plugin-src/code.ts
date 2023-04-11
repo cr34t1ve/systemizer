@@ -1,5 +1,10 @@
 /** @format */
 
+interface msgI {
+  prompt: "get-text" | "create-frames";
+  data: any;
+}
+
 function sortByFontSizeDesc(textNodes: TextNode[]): TextNode[] {
   const mixedNodes: TextNode[] = [];
   const filteredNodes: TextNode[] = textNodes.filter((node) => {
@@ -23,7 +28,7 @@ function sortByFontSizeDesc(textNodes: TextNode[]): TextNode[] {
 
 figma.showUI(__html__, { themeColors: true, height: 300, width: 420 });
 
-figma.ui.onmessage = (msg) => {
+figma.ui.onmessage = async (msg) => {
   if (msg.prompt === "get-text") {
     figma.ui.resize(970, 690);
     // Array to store OG text list
@@ -75,9 +80,48 @@ figma.ui.onmessage = (msg) => {
 
     figma.ui.postMessage({
       type: "get-text",
-      prompt: listWithValues,
+      data: listWithValues,
     });
+  } else if (msg.prompt === "create-frames") {
+    const frame = figma.createFrame();
+    frame.x = 50;
+    frame.y = 50;
+    // frame.resize(1289, 720);
+    frame.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+    figma.currentPage.selection = [frame];
+    msg.data.map(async (item: any, index: number) => {
+      const text = figma.createText();
+      // Move to (50, 50)
+      // text.x = 200;
+      // text.y = 200;
+      // Load the font in the text node before setting the characters
+      await figma.loadFontAsync({
+        family: "Inter",
+        style: "Regular",
+      });
+      await figma
+        .loadFontAsync({
+          family: item.fontName.family,
+          style: item.fontName.style,
+        })
+        .then(() => {
+          text.fontName = {
+            family: item.fontName.family,
+            style: item.fontName.style,
+          };
+          text.characters = "Lorem Ipsum";
+          text.fontSize = item.fontSize;
+          text.fills = [{ type: "SOLID", color: { r: 0, g: 0, b: 0 } }];
+        });
+      frame.appendChild(text);
+      frame.layoutGrow = 1;
+    });
+    frame.layoutMode = "VERTICAL";
+    frame.primaryAxisSizingMode = "AUTO";
+    frame.counterAxisSizingMode = "AUTO";
+    frame.itemSpacing = 30;
+    frame.verticalPadding = 100;
+    frame.horizontalPadding = 100;
+    // figma.closePlugin();
   }
-
-  // figma.closePlugin();
 };

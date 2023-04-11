@@ -134,6 +134,31 @@ img {
   width: 2rem;
 }
 
+section {
+  position: relative;
+}
+
+button {
+  all: unset;
+}
+
+.generate-button {
+  position: fixed;
+  bottom: 88px;
+  right: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 148px;
+  height: 50;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  background-color: #4b4b4b;
+  color: var(--color-white);
+  cursor: pointer;
+}
+
 .home-section {
   background-color: var(--color-secondary-bg);
   height: 100%;
