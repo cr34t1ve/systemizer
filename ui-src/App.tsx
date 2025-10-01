@@ -47,7 +47,6 @@ function App() {
   };
 
   React.useEffect(() => {
-    console.log("here");
     // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
       const { type, data }: { type: string; data: TextNodeI[] } =
